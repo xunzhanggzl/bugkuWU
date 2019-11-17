@@ -1,3 +1,5 @@
+web部分的1-20题，其中本地包含这一题的网站打不开了。
+
 # web2
 
 打开F12，看到注释中就存在flag。
@@ -221,4 +223,3 @@ id=-1' union select 1,2,3,skctf_flag from fl4g#
 ```
 
 得到flag：BUGKU{Sql_INJECT0N_4813drd8hz4}
-
