@@ -202,3 +202,25 @@ admin                  （注册的admin后面有18个空格）
 
 那么我们修改http referer头即可，使用 burpsuite 抓包，请求头添加上 `Referer:https://www.google.com`
 
+![你从哪里来](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E4%BD%A0%E4%BB%8E%E5%93%AA%E9%87%8C%E6%9D%A5.png)
+
+# md5 collision(NUPT_CTF)
+
+> 参考：https://blog.csdn.net/dyw_666666/article/details/82348564
+
+题目网址是 `http://123.206.87.240:9009/md5.php`，提示我们 please input a
+
+构造 `http://123.206.87.240:9009/md5.php?a=1`，提示 false!!!
+
+构造 `http://123.206.87.240:9009/md5.php?a=240610708`，得到flag
+
+PHP在处理哈希字符串时，会利用”!=”或”==”来对哈希值进行比较，它把每一个以”0E”开头的哈希值都解释为0，所以如果两个不同的密码经过哈希以后，其哈希值都是以”0E”开头的，那么PHP将会认为他们相同，都是0。
+
+攻击者可以利用这一漏洞，通过输入一个经过哈希后以”0E”开头的字符串，即会被PHP解释为0，如果数据库中存在这种哈希值以”0E”开头的密码的话，他就可以以这个用户的身份登录进去，尽管并没有真正的密码。
+
+# 程序员本地网站
+
+打开题目地址 `http://123.206.87.240:8002/localhost/`，提示我们：请从本地访问！
+
+与管理员系统那个题非常类似，使用burpsuite抓包，在请求头里加上**X-Forwarded-For: 127.0.0.1** 就好了。
+
