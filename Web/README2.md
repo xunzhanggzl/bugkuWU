@@ -1,3 +1,5 @@
+web部分的20+题。
+
 # 秋名山老司机
 
 亲请在2s内计算老司机的车速是多少
@@ -67,3 +69,76 @@ print(r.post(url, data).text)  # post方法传上去
 ```
 
 运行这段脚本，即可得到flag
+
+# cookies欺骗
+
+这是题目给出的url：`http://123.206.87.240:8002/web11/index.php?line=&filename=a2V5cy50eHQ=`，将`a2V5cy50eHQ=` 进行 base64 解码得到 keys.txt
+
+尝试用 filename访问 index.php（原url使用base64，这也将 index.php 进行编码，得到 aW5kZXgucGhw），line参数应该是行数，试一下 line=2
+
+即访问 http://123.206.87.240:8002/web11/index.php?line=2&filename=aW5kZXgucGhw，得到了这一串代码`$file=base64_decode(isset($_GET['filename'])?$_GET['filename']:"");`
+
+用脚本将index.php的源码读取出来
+
+```python
+import requests
+a = 30
+for i in range(a):
+  url="http://123.206.87.240:8002/web11/index.php?line="+str(i)+"&filename=aW5kZXgucGhw"
+  s = requests.get(url)
+  print(s.text)
+```
+
+运行上面的代码，可以得到php代码
+
+分析php代码，前面判断传参，后面判断cookie必须满足margin=margin才能访问keys.php
+
+编写python脚本
+
+```python
+import requests
+flag=20
+cookies={"margin":"margin"}
+for i in range(flag):
+  url="http://123.206.87.240:8002/web11/index.php?line="+str(i)+"&filename=a2V5cy5waHA="
+  s=requests.get(url,cookies=cookies)
+  print(s.text)
+```
+
+运行得到flag
+
+# never give up
+
+网页中只有这么一段：never never never give up !!!，打开题目网页查看源码发现有个 1p.html
+
+```html
+<!--1p.html-->
+never never never give up !!!
+```
+
+进行访问：http://123.206.87.240:8006/test/1p.html 发现进入了bugku的论坛，感觉没什么用
+
+就访问 `view-source:http://123.206.87.240:8006/test/1p.html`，查看一下源码，发现一大段JavaScript代码
+
+```javascript
+var Words ="..." 
+function OutWord()
+{
+var NewWords;
+NewWords = unescape(Words);
+document.write(NewWords);
+} 
+OutWord();
+```
+
+把`document.write` 换成 `console.log`，可以得到（也可以直接使用urlDecode进行解密）
+
+```
+<script>window.location.href='http://www.bugku.com';</script> 
+<!-- 一段base64编码 -->
+```
+
+发现有一层base64，将其解密得到又是一层 url，使用urlDecode继续进行解密，终于发现一段php代码。
+
+阅读源码，直接访问 http://123.206.87.240:8006/test/f4l2a3g.txt 即可得到flag
+
