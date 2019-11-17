@@ -117,6 +117,8 @@ JavaScript代码组成的表达式
 
 # flag在index里
 
+> 参考 https://blog.csdn.net/zpy1998zpy/article/details/80585443 
+
 点击后发现网址变成了http://123.206.87.240:8005/post/index.php?file=show.php
 
 这里我们看到了file关键字，于是我们就想到了php://filter，把网址改为 http://123.206.87.240:8005/post/index.php?file=php://filter/read=convert.base64-encode/resource=index.php，得到一段base64编码，解码得到flag
@@ -136,3 +138,10 @@ JavaScript代码组成的表达式
 ![点击一百万次](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%82%B9%E5%87%BB%E4%B8%80%E7%99%BE%E4%B8%87%E6%AC%A1.png)
 
 ![点击一百万次2](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%82%B9%E5%87%BB%E4%B8%80%E7%99%BE%E4%B8%87%E6%AC%A12.png)
+
+# 备份是个好习惯
+
+> 参考 https://blog.csdn.net/wyj____/article/details/90694603 
+>
+> https://blog.csdn.net/EustiaSora/article/details/79149411
+
