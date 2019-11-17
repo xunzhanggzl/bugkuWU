@@ -1,4 +1,4 @@
-web部分的20+题。
+web部分的20+题。welcome to bugkuctf这道题打开404
 
 # 秋名山老司机
 
@@ -141,4 +141,64 @@ OutWord();
 发现有一层base64，将其解密得到又是一层 url，使用urlDecode继续进行解密，终于发现一段php代码。
 
 阅读源码，直接访问 http://123.206.87.240:8006/test/f4l2a3g.txt 即可得到flag
+
+# 字符？正则？
+
+打开题目页面，有一段下面的代码，是考察正则表达式的。
+
+```php
+<?php 
+highlight_file('2.php');
+$key='KEY{********************************}';
+$IM= preg_match("/key.*key.{4,7}key:\/.\/(.*key)[a-z][[:punct:]]/i", trim($_GET["id"]), $match);
+if( $IM ){ 
+  die('key is: '.$key);
+}
+?>
+```
+
+构造 `http://123.206.87.240:8002/web10/?id=keyykeyyyyykey:///1keya.`，即可得到flag
+
+# 前女友(SKCTF)
+
+打开链接发现下面的代码，md5加密比较get方法的v1，v2和v3
+
+```php
+<?php
+if(isset($_GET['v1']) && isset($_GET['v2']) && isset($_GET['v3'])){
+    $v1 = $_GET['v1'];
+    $v2 = $_GET['v2'];
+    $v3 = $_GET['v3'];
+    if($v1 != $v2 && md5($v1) == md5($v2)){
+        if(!strcmp($v3, $flag)){
+            echo $flag;
+        }
+    }
+}
+?>
+```
+
+`http://123.206.31.85:49162/?v1[]=1&&v2[]=2&&v3[]=3`，构造出 `?v1[]=1&&v2[]=2&&v3[]=3`，得到flag
+
+# login1(SKCTF)
+
+> 参考：https://blog.csdn.net/qq_42777804/article/details/81866940https://blog.csdn.net/qq_42777804/article/details/81866940
+
+提示我们用 hint:SQL约束攻击
+
+我们需要做的就是注册一个在数据库中会被认为是admin的账户，然后使用这个admin账户登录。
+
+注册用户名为
+
+admin                  （注册的admin后面有18个空格）
+
+密码随便写一个，但要符合要求
+
+注册成功之后用这个注册的登陆就拿到了flag
+
+# 你从哪里来
+
+打开题目网站提示我们：are you from google?
+
+那么我们修改http referer头即可，使用 burpsuite 抓包，请求头添加上 `Referer:https://www.google.com`
 
