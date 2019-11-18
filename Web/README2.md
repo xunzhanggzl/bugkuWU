@@ -1,4 +1,4 @@
-web部分的20-36题。welcome to bugkuctf这道题打开404
+web部分的20-36题。welcome to bugkuctf 和 过狗一句话 这两道题打开404
 
 # 秋名山老司机
 
@@ -284,3 +284,11 @@ if ($_GET[x]==$password) 此处省略1w字
 关于扩展名：
 
 试验过php2, php3, php4, php5，phps, pht, phtm, phtml之后，发现只有php5可以绕过
+
+未修改之前如下图所示：
+
+![求getshell1](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E6%B1%82getseller.png)
+
+修改之后
+
+![求getshell2](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E6%B1%82getseller2.png)
