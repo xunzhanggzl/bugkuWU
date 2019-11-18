@@ -267,3 +267,20 @@ if ($_GET[x]==$password) 此处省略1w字
 
 也就知道了要get方法传参**x=admin**，即 http://123.206.87.240:8002/web13/resusl.php?x=admin，得到flag
 
+# 求getshell
+
+题目提示：My name is margin,give me a image file not a php
+
+一道典型的文件上传的题目，显然只允许上传图片格式，不允许上传PHP脚本，但我们就是要上传一句话木马！
+
+提交之后抓包，要修改三个地方：
+
+1、扩展名filename
+
+2、filename下面一行的Content-Type:image/jpeg
+
+3、最重要的是请求头里的Content-Type字段，进行大小写绕过，也就是把multipart/form-data中任意一个字母改成大写即可
+
+关于扩展名：
+
+试验过php2, php3, php4, php5，phps, pht, phtm, phtml之后，发现只有php5可以绕过
