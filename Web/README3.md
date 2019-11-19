@@ -30,11 +30,51 @@ function encrypt($data,$key)
 ?>
 ```
 
+写出相应的脚本如下，运行下面的解密代码即可得到flag
+
+```python
+import base64
+import hashlib
+
+
+def decrypt(b64):
+    b64 = str(base64.b64decode(b64), encoding='utf8')  # base64转换后是byte类型数据
+    key = 'ISCC'
+    m = hashlib.md5()
+    m.update(key.encode())
+    md = m.hexdigest()
+    b64_len = len(b64)
+    x = 0
+    char = ''
+    for i in range(b64_len):  # strlen($str)==strlen($char)==strlen($data)
+        if x == len(md):
+            x = 0
+        char += md[x]
+        x += 1
+    data = ''
+    # 也可不进行正负判断：data += chr((ord(b64[i]) - ord(char[i])+128) % 128)
+    for i in range(b64_len):
+        d = ord(b64[i]) - ord(char[i])
+        if d > 0:  # 进行判断，如果相减小于0，说明需要加上128
+            data += chr(d)
+        else:
+            data += chr(d + 128)
+    print(data)
+
+
+if __name__ == "__main__":
+    b64 = 'fR4aHWwuFCYYVydFRxMqHhhCKBseH1dbFygrRxIWJ1UYFhotFjA='
+    decrypt(b64)
+
+```
+
 # 文件包含2
 
 查看源码，发现注释中有 upload.php 的提示，于是打开 http://123.206.31.85:49166/upload.php，发现是文件上传。
 
 在php文件里写入 `<script language=php>system("ls")</script>` ，列当前目录，修改后缀名为jpg,如1.php;.jpg,上传成功，如下图所示：
+
+![文件包含2](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB2.png)
 
 访问 http://123.206.31.85:49166/index.php?file=upload/201911191206089664.jpg，提示我们：about hello.php index.php this_is_th3_F14g_154f65sd4g35f4d6f43.txt upload upload.php。
 
