@@ -187,6 +187,8 @@ $KEY='ISecer:www.isecer.com';
 
 运行上面的代码，输出：`s:0:"";` 然后进行burpsuite 抓包，如下图所示，得到了flag
 
+![flag.php](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/flagphp.png)
+
 # sql注入2
 
 题目网站：http://123.206.87.240:8007/web2/
