@@ -10,3 +10,4 @@
 
 下载下来是一张图片，用 winhex 打开发现图片的宽高不一样，把A改成F就可以看到flag了。如下图：
 
+![隐写](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/sundry_img/%E9%9A%90%E5%86%99.png)
