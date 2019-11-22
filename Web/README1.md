@@ -14,39 +14,90 @@ web部分的1-20题，其中本地包含这一题的网站打不开了。
 
 # web基础$_GET
 
-阅读网页上的代码知，考查的是get的性质
+阅读网页上的代码知，构造key为what，value为flag的get请求就可以了。
 
 ![web基础$_GET](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web基础%24_GET.png)
 
 # web基础$_POST
 
-借助Postman工具进行POST请求
+阅读源码可知要构造key为what，value为flag的post请求，可以借助Postman工具进行POST请求如下图。
 
 ![web基础$_POST](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web基础%24_POST.png)
 
+也可以利用一下 python 的 requests 来构造 post 请求
+
+```python
+import requests
+
+payload = {'what': 'flag'}
+
+r = requests.post("http://123.206.87.240:8002/post/", data=payload)
+
+print(r.text)
+
+# $what=$_POST['what'];<br>
+# echo $what;<br>
+# if($what=='flag')<br>
+# echo 'flag{****}';<br>
+
+# flagflag{bugku_get_ssseint67se}
+```
+
 # 矛盾
 
-阅读代码可知，要发送一个get请求且num=1，直接输入1是不行的，通过了解is_numeric的性质知输入1x也可以转为1，得flag。
+> https://www.php.net/manual/zh/function.is-numeric.php
+
+阅读代码可知，要发送一个 get 请求且 num=1，直接输入 1 是不行的，通过了解 is_numeric 的性质知输入1x 也可以通过 if 判断，然后下面的 == 进行转换成为 1，得到 flag。
+
+is_numeric — 检测变量是否为数字或数字字符串
 
 ![矛盾](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%9F%9B%E7%9B%BE.png)
 
 # web3
 
-将源码中的注释部分直接放入html中，打开该html文件，即可看到flag。
+将源码中的注释部分（典型的 numeric character reference（NCR））直接放入html中，打开该html文件，即可看到flag。
 
 ![](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web3.png)
 
+也可以用python进行解析
+
+```python
+import html
+
+print(html.unescape('&#75;&#69;&#89;&#123;&#74;&#50;&#115;&#97;&#52;&#50;&#97;&#104;&#74;&#75;&#45;&#72;&#83;&#49;&#49;&#73;&#73;&#73;&#125;'))
+# KEY{J2sa42ahJK-HS11III}
+```
+
 # 域名解析
 
-直接上图，修改本地hosts文件（最后一行添加上就可以）即可访问给出的地址
+题目提示：听说把 flag.baidu.com 解析到123.206.87.240 就能拿到flag
+
+如下图，修改本地hosts文件（最后一行添加上就可以）即可访问给出的地址
 
 ![域名解析](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90.png)
 
 # 你必须让他停下
 
+> https://cloud.tencent.com/developer/news/294560
+
 使用burpsuite进行抓包，第十张图片存在flag
 
 ![你必须让他停下](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E4%BD%A0%E5%BF%85%E9%A1%BB%E8%AE%A9%E4%BB%96%E5%81%9C%E4%B8%8B.png)
+
+也可以借助python的requests库
+
+```python
+import requests
+
+while True:
+    url = "http://123.206.87.240:8002/web12/"
+    s = requests.session()
+    r = s.get(url)
+    # print(a1.text)
+    if "flag{" in r.text:
+        print(r.text)
+        break
+```
 
 # 变量1
 
