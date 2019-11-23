@@ -8,6 +8,22 @@ web部分的20-36题。welcome to bugkuctf 和 过狗一句话 这两道题打�
 
 Give me value post about 1531922609+1823637330*1021219038*24080258-1453837304+724139088+460522784-596962562-1691520371*1512685444-1749655109=?
 
+使用burpsuite抓包得到下面的内容，下面的 `Set-Cookie: PHPSESSID` 暗示要在一个会话中进行。
+
+```
+HTTP/1.1 200 OK
+Server: nginx
+Date: Sat, 23 Nov 2019 07:40:30 GMT
+Content-Type: text/html
+Connection: close
+Set-Cookie: PHPSESSID=p80dhos8d9fqntg2q0qnafdntrpir5hj; path=/; HttpOnly
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Set-Cookie: Timeout=alive; expires=Sat, 23-Nov-2019 07:40:32 GMT
+Content-Length: 347
+```
+
 上面的提示给出是用POST请求，发送value值，两秒内肯定自己算不出来，写一个python脚本如下
 
 ```python
@@ -33,7 +49,9 @@ print(flag.text)  # 打印返回的数据即flag值
 
 # 速度要快
 
-通过抓包得到了下面的内容
+打开题目源码的注释中有这么一句：<!-- OK ,now you have to post the margin what you find -->
+
+通过抓包得到了下面的内容，下面的 `Set-Cookie: PHPSESSID` 暗示要在一个会话中进行。
 
 ```
 HTTP/1.1 200 OK
@@ -51,24 +69,35 @@ Content-Length: 89
 </br>ææè§ä½ å¾å¿«ç¹!!!<!-- OK ,now you have to post the margin what you find -->
 ```
 
-将flag那个字段进行base64解码，得到的是**跑的还不错，给你flag吧: MzMwNTE3**，然而这是不对的，然后发现每次抓包flag那个字段都会改变，所以要写脚本。
+将flag那个字段进行base64解码，得到的是**跑的还不错，给你flag吧: MzMwNTE3**，然而这是不对的，后来发现每次抓包flag那个字段都会改变（因为会话的不同），所以要写脚本。运行下面这段脚本，即可得到flag
 
 ```python
 import requests
 import base64
+
 url = "http://123.206.87.240:8002/web6/"
 r = requests.session()
 headers = r.get(url).headers  # 因为flag在消息头里
-
 mid = base64.b64decode(headers['flag'])
+
+print(mid) # 这里解码出来是byte类型的
+# b'\xe8\xb7\x91\xe7\x9a\x84\xe8\xbf\x98\xe4\xb8\x8d\xe9\x94\x99\xef\xbc\x8c\xe7\xbb\x99\xe4\xbd\xa0flag\xe5\x90\xa7: NjM5ODk5'
+
 mid = mid.decode()  # 为了下一步用split不报错，b64decode后操作的对象是byte类型的字符串，而split函数要用str类型的
 
-flag = base64.b64decode(mid.split(':')[1])  # 获得flag:后的值
-data = {'margin': flag}
-print(r.post(url, data).text)  # post方法传上去
-```
+print(mid)
+# 跑的还不错，给你flag吧: NjM5ODk5
 
-运行这段脚本，即可得到flag
+flag = base64.b64decode(mid.split(':')[1])  # 获得flag:后的值，这里不知道为什么还有这一步解码
+
+print(flag)
+# b'639899'
+
+data = {'margin': flag}
+
+print(r.post(url, data).text)  # post方法传上去
+# KEY{111dd62fcd377076be18a}
+```
 
 # cookies欺骗
 

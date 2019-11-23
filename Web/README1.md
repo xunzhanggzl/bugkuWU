@@ -91,9 +91,7 @@ import requests
 
 while True:
     url = "http://123.206.87.240:8002/web12/"
-    s = requests.session()
-    r = s.get(url)
-    # print(a1.text)
+    r = requests.get(url)
     if "flag{" in r.text:
         print(r.text)
         break
@@ -244,6 +242,8 @@ document.getElementById("levelQuest").onsubmit = checkSubmit;
 > 参考 https://blog.csdn.net/wyj____/article/details/90694603 
 >
 > https://blog.csdn.net/EustiaSora/article/details/79149411
+
+使用御剑进行扫描
 
 ![备份是个好习惯](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E5%A4%87%E4%BB%BD%E6%98%AF%E4%B8%AA%E5%A5%BD%E4%B9%A0%E6%83%AF.png)
 

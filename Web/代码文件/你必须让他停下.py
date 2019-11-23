@@ -1,16 +1,14 @@
 '''
-  利用requests持续发送get请求
+  利用requests持续发送get请求(不用session)
   理论：https://2.python-requests.org//en/latest/user/advanced/#session-objects
   代码：https://cloud.tencent.com/developer/news/294560
-  题目：你必须让他停下
+  题目：bugkuctf 你必须让他停下
 '''
 import requests
 
 while True:
     url = "http://123.206.87.240:8002/web12/"
-    s = requests.session()
-    r = s.get(url)
-    # print(a1.text)
+    r = requests.get(url)
     if "flag{" in r.text:
         print(r.text)
         break
