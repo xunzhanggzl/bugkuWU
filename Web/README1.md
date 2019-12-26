@@ -2,29 +2,91 @@ web部分的1-20题，其中本地包含这一题的网站打不开了。
 
 # web2
 
-打开F12，看到注释中就存在flag。
+> https://developer.mozilla.org/zh-CN/docs/Web/HTML
+
+随便一个浏览器F12（Inspect Element）打开控制台，看到 HTML（超文本标记语言——HyperText Markup Language）注释中就存在flag。
+
+HTML 注释格式 `<!-- 注释内容 -->`。
+
+关键代码：
+
+```html
+<!--flag KEY{Web-2-bugKssNNikls9100}-->
+```
 
 ![web2](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web2.png)
 
 # 计算器
 
-输入框中只允许输入一个数字，查看源码发现`maxlength=1`，改成大一点的数字就好了。
+> https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/input/text#maxlength
+>
+> 用户可以输入`文本`输入框中的最大字符(参考UTF-16编码单元)数。 必须为整数，值等于0或者更大。 如果没有规定 `maxlength` ， 或者规定的值无效, 文本输入框就没有最大值。这个值也必须更大或者等于`minlength`的值。
+>
+> 如果文本框中的字符数大于 `maxlength` UTF-16编码单元，输入框的[验证](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation)就会失败。 约束验证仅作用于用户输入值的时候。
+
+输入框中只允许输入一个数字，查看源码发现`maxlength=1`，改成大一点的数字就好了（这里改成了5，其实只要能大于三位就好了这个题）。
+
+关键代码：
+
+```html
+<input type="text" class="input" maxlength="1">
+```
 
 ![计算器](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/随机数字运算.png)
 
 # web基础$_GET
 
-阅读网页上的代码知，构造key为what，value为flag的get请求就可以了。
+> https://stackoverflow.com/questions/14551194/how-are-parameters-sent-in-an-http-post-request
+>
+> In an HTTP **GET** request, parameters are sent as a **query string**:
+>
+> http://example.com/page**?parameter=value&also=another**
+
+这是网页上的提示的 PHP 代码：
+
+```php
+$what=$_GET['what'];
+echo $what;
+if($what=='flag')
+echo 'flag{****}';
+```
+
+阅读 PHP 代码可知，构造 key 为 what，value 为 flag 的 get 请求就可以了。
+
+直接使用浏览器构造即可，如下图所示：
 
 ![web基础$_GET](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web基础%24_GET.png)
 
 # web基础$_POST
 
-阅读源码可知要构造key为what，value为flag的post请求，可以借助Postman工具进行POST请求如下图。
+> https://stackoverflow.com/questions/14551194/how-are-parameters-sent-in-an-http-post-request
+>
+> The values are sent in the request body, in the format that the content type specifies.
+>
+> Usually the content type is `application/x-www-form-urlencoded`, so the request body uses the same format as the query string:
+>
+> ```
+> parameter=value&also=another
+> ```
+>
+> When you use a file upload in the form, you use the `multipart/form-data` encoding instead, which has a different format. It's more complicated, but you usually don't need to care what it looks like, so I won't show an example, but it can be good to know that it exists.
+
+这是网页上的提示的 PHP 代码：
+
+```php
+$what=$_POST['what'];
+echo $what;
+if($what=='flag')
+echo 'flag{****}';
+```
+
+阅读 PHP 代码可知要构造 key 为 what，value 为 flag 的 post 请求，可以借助 Postman 工具构造 POST 请求
+
+如下图所示：
 
 ![web基础$_POST](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web基础%24_POST.png)
 
-也可以利用一下 python 的 requests 来构造 post 请求
+也可以利用一下 python 的 requests 库来构造 post 请求
 
 ```python
 import requests
@@ -46,20 +108,52 @@ print(r.text)
 # 矛盾
 
 > https://www.php.net/manual/zh/function.is-numeric.php
+>
+> is_numeric — 检测变量是否为数字或数字字符串
+>
+> is_numeric ( [mixed](https://www.php.net/manual/zh/language.pseudo-types.php#language.types.mixed) `$var` ) : bool
+>
+> 如果 `var` 是数字和数字字符串则返回 **TRUE**，否则返回 **FALSE**。
+
+```php
+$num=$_GET['num'];
+if(!is_numeric($num))
+{
+echo $num;
+if($num==1)
+echo 'flag{**********}';
+}
+```
 
 阅读代码可知，要发送一个 get 请求且 num=1，直接输入 1 是不行的，通过了解 is_numeric 的性质知输入1x 也可以通过 if 判断，然后下面的 == 进行转换成为 1，得到 flag。
 
-is_numeric — 检测变量是否为数字或数字字符串
+如下图所示：
 
 ![矛盾](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%9F%9B%E7%9B%BE.png)
 
 # web3
 
-将源码中的注释部分（典型的 numeric character reference（NCR））直接放入html中，打开该html文件，即可看到flag。
+打开这个网站后，chrome 的弹框处理让它只弹出了一个框，查看控制台。
+
+如下图所示：
+
+![](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web3_2.png)
+
+这是**典型的 numeric character reference（NCR）**
+
+有两种方式可以解出这个题目：
+
+第一种方式：
+
+将源码中的注释部分（典型的 numeric character reference（NCR））直接放入html中，双击打开该html文件，即可看到flag。
+
+如下图所示：
 
 ![](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web3.png)
 
-也可以用python进行解析
+第二种方式：
+
+用 python 进行解析
 
 ```python
 import html
@@ -249,13 +343,6 @@ document.getElementById("levelQuest").onsubmit = checkSubmit;
 
 ```php
 <?php
-/**
- * Created by PhpStorm.
- * User: Norse
- * Date: 2017/8/6
- * Time: 20:22
-*/
-
 include_once "flag.php";
 ini_set("display_errors", 0);
 $str = strstr($_SERVER['REQUEST_URI'], '?');
