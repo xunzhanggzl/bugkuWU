@@ -286,25 +286,31 @@ print(d)
 
 ![网站被黑2](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%BD%91%E7%AB%99%E8%A2%AB%E9%BB%912.png)
 
-使用burpsuite进行暴力破解，length不和其他一样的即为密码。
+使用 burpsuite 进行暴力破解，length 不和其他一样的即为密码。
 
 ![网站被黑3](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%BD%91%E7%AB%99%E8%A2%AB%E9%BB%913.png)
 
 # 管理员系统
 
-> 参考 https://blog.csdn.net/xyx107/article/details/83017560 
+> https://blog.csdn.net/xyx107/article/details/83017560 
 >
 > https://blog.csdn.net/Ruhe_king/article/details/82494834
 
-在源码的注释中有 `dGVzdDEyMw==` 这一段，使用base64解码得到 `test123`，使用用户名 `admin`，密码 `test123`登录尝试得到下面的结果
+在源码的注释中有 `dGVzdDEyMw==` 这一段，使用 base64 解码得到 `test123`，使用用户名 `admin`，密码 `test123` 登录尝试得到下面的结果
 
 ![管理员系统2](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%AE%A1%E7%90%86%E5%91%98%E7%B3%BB%E7%BB%9F2.png)
 
-提示中有**本地**，使用burpsuit抓包，修改XFF，【XFF：HTTP 请求头中的 X-Forwarded-For，用来表示 HTTP 请求端真实 IP】，抓包后，send to repeater，添加X-Forwarded-For：127.0.0.1，GO
+提示中有**本地**
+
+## 方法一：
+
+使用 burpsuit 抓包，修改 XFF，【XFF：HTTP 请求头中的 X-Forwarded-For，用来表示 HTTP 请求端真实 IP】，抓包后，send to repeater，添加 X-Forwarded-For：127.0.0.1，GO
 
 ![管理员系统](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%AE%A1%E7%90%86%E5%91%98%E7%B3%BB%E7%BB%9F.png)
 
-也可以借助python的requests库
+## 方法二：
+
+也可以借助 python 的 requests 库
 
 ```python
 import requests
@@ -320,7 +326,11 @@ print(r.text)
 
 # web4
 
-提示我们看看源代码，将eval改成console.log,得到了下面`checkSubmit`函数，此题得解。
+提示我们看看源代码，源代码如下图所示：
+
+![web4](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web4_2.png)
+
+将 eval 改成 console.log，得到了下面 `checkSubmit` 函数，即在 input 输入框中输入 `67d709b2b54aa2aa648cf6e87a7114f1` 即可，此题得解。
 
 ![web4](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web4.png)
 
