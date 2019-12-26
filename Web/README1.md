@@ -133,13 +133,15 @@ echo 'flag{**********}';
 
 # web3
 
+> https://www.zhihu.com/question/21390312
+
 打开这个网站后，chrome 的弹框处理让它只弹出了一个框，查看控制台。
 
 如下图所示：
 
 ![](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web3_2.png)
 
-这是**典型的 numeric character reference（NCR）**
+值得注意的是：这是**典型的 numeric character reference（NCR），不是「编码」。数字取值为目标字符的 Unicode code point；以「&#」开头的后接十进制数字，以「&#x」开头的后接十六进制数字**。
 
 有两种方式可以解出这个题目：
 
@@ -172,13 +174,13 @@ print(html.unescape('&#75;&#69;&#89;&#123;&#74;&#50;&#115;&#97;&#52;&#50;&#97;&#
 
 # 你必须让他停下
 
-> https://cloud.tencent.com/developer/news/294560
+打开浏览器，发现一直在闪动。
 
-使用burpsuite进行抓包，第十张图片存在flag
+直接使用burpsuite进行抓包，第十张图片存在 flag。
 
 ![你必须让他停下](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E4%BD%A0%E5%BF%85%E9%A1%BB%E8%AE%A9%E4%BB%96%E5%81%9C%E4%B8%8B.png)
 
-也可以借助python的requests库
+也可以借助 python 的 requests 库编码实现抓包：
 
 ```python
 import requests
@@ -193,7 +195,9 @@ while True:
 
 # 变量1
 
-参数args值必须是由[A-Za-z0-9]字符集组成,并且将args值作为新的变量输出然后eval函数执行 根据题目的示,flag值是一个变量,然而这个变量并不在我们访问的php文件中有定义，所以我们可以猜测flag可能是一个全局变量，php的全局变量是$GLOBALS，所以可以给参数args赋值GLOBALS，就可以将全局变量输出出来
+参数 args 的值必须是由 [A-Za-z0-9] 字符集组成，并且将 args 值作为新的变量输出然后 eval 函数执行 根据题目的示，flag 值是一个变量，然而这个变量并不在我们访问的 php 文件中有定义，所以我们可以猜测 flag 可能是一个全局变量，php 的全局变量是 $GLOBALS，所以可以给参数 args 赋值为 GLOBALS，就可以将全局变量输出出来。
+
+网页提示代码如下：
 
 ```php
 flag In the variable ! <?php  
@@ -211,11 +215,23 @@ if(isset($_GET['args'])){
 ?>
 ```
 
+在浏览器下直接构造 GET 请求，key 为 args，value 为 GLOBALS
+
 ![变量1](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E5%8F%98%E9%87%8F1.png)
 
 # web5
 
-JavaScript代码组成的表达式
+打开浏览器控制台查看源码发现一个 div 元素被隐藏了（通过 CSS 设置的 display:none）。
+
+```html
+<div style="display:none;">
+    ...
+</div>
+```
+
+![web5](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web5_2.png)
+
+将上图中的 JavaScript 代码组成的表达式 copy 到 console 控制台中按下回车键直接可以显示这一段 JavaScript 代码的最终结果。
 
 ![web5](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web5.png)
 
