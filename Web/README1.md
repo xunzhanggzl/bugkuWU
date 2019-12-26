@@ -80,11 +80,17 @@ if($what=='flag')
 echo 'flag{****}';
 ```
 
-阅读 PHP 代码可知要构造 key 为 what，value 为 flag 的 post 请求，可以借助 Postman 工具构造 POST 请求
+阅读 PHP 代码可知要构造 key 为 what，value 为 flag 的 post 请求。
+
+## 方法一：
+
+可以借助 Postman 工具构造 POST 请求
 
 如下图所示：
 
 ![web基础$_POST](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web基础%24_POST.png)
+
+## 方法二：
 
 也可以利用一下 python 的 requests 库来构造 post 请求
 
@@ -145,15 +151,15 @@ echo 'flag{**********}';
 
 有两种方式可以解出这个题目：
 
-第一种方式：
+## 方法一：
 
-将源码中的注释部分（典型的 numeric character reference（NCR））直接放入html中，双击打开该html文件，即可看到flag。
+将源码中的注释部分（典型的 numeric character reference（NCR））直接放入一个 html 文件中，双击打开该html 文件，即可看到 flag。
 
 如下图所示：
 
 ![](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/web3.png)
 
-第二种方式：
+## 方法二：
 
 用 python 进行解析
 
@@ -176,9 +182,13 @@ print(html.unescape('&#75;&#69;&#89;&#123;&#74;&#50;&#115;&#97;&#52;&#50;&#97;&#
 
 打开浏览器，发现一直在闪动。
 
+## 方法一：
+
 直接使用burpsuite进行抓包，第十张图片存在 flag。
 
 ![你必须让他停下](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E4%BD%A0%E5%BF%85%E9%A1%BB%E8%AE%A9%E4%BB%96%E5%81%9C%E4%B8%8B.png)
+
+## 方法二：
 
 也可以借助 python 的 requests 库编码实现抓包：
 
@@ -237,11 +247,25 @@ if(isset($_GET['args'])){
 
 # 头等舱
 
-使用burpsuite抓包，一抓就出来了。
+解答该题有三种方式
+
+## 方法一：
+
+直接查看控制台的 network，发现就在 Response 的 Headers 中
+
+![头等舱](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/头等舱2.png)
+
+## 方法二：
+
+直接使用 burpsuite 抓包，一抓就出来了。
 
 ![头等舱](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E5%A4%B4%E7%AD%89%E8%88%B1.png)
 
-也可以借助python的requests库
+## 方法三：
+
+可以借助 python 的 requests 库实现抓取过程
+
+代码如下：
 
 ```python
 import requests
