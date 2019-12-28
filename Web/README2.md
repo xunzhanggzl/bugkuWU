@@ -289,7 +289,7 @@ if( $IM ){
 
 # 前女友(SKCTF)
 
-打开链接发现下面的代码，md5加密比较get方法的v1，v2和v3
+打开链接发现下面的代码，md5 加密比较 get 方法的 v1，v2 和 v3
 
 ```php
 <?php
@@ -310,7 +310,11 @@ if(isset($_GET['v1']) && isset($_GET['v2']) && isset($_GET['v3'])){
 
 # login1(SKCTF)
 
-> https://blog.csdn.net/qq_42777804/article/details/81866940https://blog.csdn.net/qq_42777804/article/details/81866940
+打开网站如下：
+
+![login1](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/login1.png)
+
+![login1_2](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/login1_2.png)
 
 提示我们用 hint:SQL约束攻击
 
@@ -322,7 +326,7 @@ admin                  （注册的admin后面有18个空格）
 
 密码随便写一个，但要符合要求
 
-注册成功之后用这个注册的登陆就拿到了flag
+注册成功之后用这个注册的登录就拿到了 flag
 
 # 你从哪里来
 
