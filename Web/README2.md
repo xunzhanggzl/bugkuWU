@@ -103,7 +103,7 @@ print(r.post(url, data).text)  # post方法传上去
 
 这是题目给出的url：`http://123.206.87.240:8002/web11/index.php?line=&filename=a2V5cy50eHQ=`，将`a2V5cy50eHQ=` 进行 base64 解码得到 keys.txt
 
-尝试用 filename访问 index.php（原url使用base64，这也将 index.php 进行编码，得到 aW5kZXgucGhw），line参数应该是行数，试一下 line=2
+尝试用 filename 访问 index.php（原url使用base64，这也将 index.php 进行编码，得到 aW5kZXgucGhw），line参数应该是行数，试一下 line=2
 
 即访问 http://123.206.87.240:8002/web11/index.php?line=2&filename=aW5kZXgucGhw，得到了这一串代码`$file=base64_decode(isset($_GET['filename'])?$_GET['filename']:"");`
 
@@ -253,7 +253,7 @@ if(isset($_GET['v1']) && isset($_GET['v2']) && isset($_GET['v3'])){
 
 # login1(SKCTF)
 
-> 参考：https://blog.csdn.net/qq_42777804/article/details/81866940https://blog.csdn.net/qq_42777804/article/details/81866940
+> https://blog.csdn.net/qq_42777804/article/details/81866940https://blog.csdn.net/qq_42777804/article/details/81866940
 
 提示我们用 hint:SQL约束攻击
 
@@ -329,13 +329,35 @@ get方法构造出 `http://123.206.87.240:8002/web7/?id=margin&uname[]=1`，post
 
 题目提示我们：txt？？？？进入 `http://123.206.87.240:8002/web8/flag.txt`，显示 flags
 
-进入题目网站 `http://123.206.87.240:8002/web8/`，有一段php代码，阅读代码知：$ac是指flag.txt中的内容flags，$fn指的是flag.txt这个文件。
+进入题目网站 `http://123.206.87.240:8002/web8/`，有一段php代码
+
+```php
+<?php
+extract($_GET);
+if (!empty($ac))
+{
+$f = trim(file_get_contents($fn));
+if ($ac === $f)
+{
+echo "<p>This is flag:" ." $flag</p>";
+}
+else
+{
+echo "<p>sorry!</p>";
+}
+}
+?>
+```
+
+阅读代码知：$ac 是指 flag.txt 中的内容 flags，$fn 指的是 flag.txt 这个文件。
 
 构造 `http://123.206.87.240:8002/web8/?ac=flags&fn=flag.txt`，访问就得到了 flag
 
 # 细心
 
-提示：想办法变成admin
+提示：想办法变成 admin
+
+![细心](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/细心.png)
 
 使用御剑扫描出了 http://123.206.87.240:8002/web13/robots.txt，内容如下：
 
@@ -345,6 +367,8 @@ Disallow: /resusl.php
 ```
 
 然后访问 http://123.206.87.240:8002/web13/resusl.php，得到下面的内容
+
+![细心2](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/细心2.png)
 
 Warning:你不是管理员你的IP已经被记录到日志了
 
@@ -357,6 +381,8 @@ By bugkuctf.
 if ($_GET[x]==$password) 此处省略1w字
 
 也就知道了要get方法传参**x=admin**，即 http://123.206.87.240:8002/web13/resusl.php?x=admin，得到flag
+
+![细心3](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/细心3.png)
 
 # 求getshell
 
