@@ -73,7 +73,7 @@ Content-Length: 89
 </br>ææè§ä½ å¾å¿«ç¹!!!<!-- OK ,now you have to post the margin what you find -->
 ```
 
-将 flag 那个字段进行base64解码，得到的是**跑的还不错，给你flag吧: MzMwNTE3**，然而这是不对的，后来发现每次抓包 flag 那个字段都会改变（因为会话的不同），所以要写脚本。运行下面这段脚本，即可得到flag
+将 flag 那个字段进行 base64 解码，得到的是**跑的还不错，给你flag吧: MzMwNTE3**，然而这是不对的，后来发现每次抓包 flag 那个字段都会改变（因为会话的不同），所以要写脚本。运行下面这段脚本，即可得到 flag
 
 ```python
 import requests
@@ -165,9 +165,9 @@ echo $fa[$line];
 ?>
 ```
 
-分析php代码，前面判断传参，后面判断cookie必须满足margin=margin才能访问keys.php
+分析 php 代码，前面判断传参，后面判断 cookie 必须满足 margin=margin 才能访问 keys.php
 
-编写python脚本
+编写 python 脚本
 
 ```python
 import requests
@@ -193,7 +193,30 @@ never never never give up !!!
 
 进行访问：http://123.206.87.240:8006/test/1p.html 发现进入了bugku的论坛，感觉没什么用
 
-就访问 `view-source:http://123.206.87.240:8006/test/1p.html`，查看一下源码，发现一大段JavaScript代码
+就访问 `view-source:http://123.206.87.240:8006/test/1p.html`，查看一下源码。
+
+```html
+<HTML>
+<HEAD>
+<SCRIPT LANGUAGE="Javascript">
+<!--
+var Words ="%3Cscript%3Ewindow.location.href%3D%27http%3A//www.bugku.com%27%3B%3C/script%3E%20%0A%3C%21--JTIyJTNCaWYlMjglMjElMjRfR0VUJTVCJTI3aWQlMjclNUQlMjklMEElN0IlMEElMDloZWFkZXIlMjglMjdMb2NhdGlvbiUzQSUyMGhlbGxvLnBocCUzRmlkJTNEMSUyNyUyOSUzQiUwQSUwOWV4aXQlMjglMjklM0IlMEElN0QlMEElMjRpZCUzRCUyNF9HRVQlNUIlMjdpZCUyNyU1RCUzQiUwQSUyNGElM0QlMjRfR0VUJTVCJTI3YSUyNyU1RCUzQiUwQSUyNGIlM0QlMjRfR0VUJTVCJTI3YiUyNyU1RCUzQiUwQWlmJTI4c3RyaXBvcyUyOCUyNGElMkMlMjcuJTI3JTI5JTI5JTBBJTdCJTBBJTA5ZWNobyUyMCUyN25vJTIwbm8lMjBubyUyMG5vJTIwbm8lMjBubyUyMG5vJTI3JTNCJTBBJTA5cmV0dXJuJTIwJTNCJTBBJTdEJTBBJTI0ZGF0YSUyMCUzRCUyMEBmaWxlX2dldF9jb250ZW50cyUyOCUyNGElMkMlMjdyJTI3JTI5JTNCJTBBaWYlMjglMjRkYXRhJTNEJTNEJTIyYnVna3UlMjBpcyUyMGElMjBuaWNlJTIwcGxhdGVmb3JtJTIxJTIyJTIwYW5kJTIwJTI0aWQlM0QlM0QwJTIwYW5kJTIwc3RybGVuJTI4JTI0YiUyOSUzRTUlMjBhbmQlMjBlcmVnaSUyOCUyMjExMSUyMi5zdWJzdHIlMjglMjRiJTJDMCUyQzElMjklMkMlMjIxMTE0JTIyJTI5JTIwYW5kJTIwc3Vic3RyJTI4JTI0YiUyQzAlMkMxJTI5JTIxJTNENCUyOSUwQSU3QiUwQSUwOXJlcXVpcmUlMjglMjJmNGwyYTNnLnR4dCUyMiUyOSUzQiUwQSU3RCUwQWVsc2UlMEElN0IlMEElMDlwcmludCUyMCUyMm5ldmVyJTIwbmV2ZXIlMjBuZXZlciUyMGdpdmUlMjB1cCUyMCUyMSUyMSUyMSUyMiUzQiUwQSU3RCUwQSUwQSUwQSUzRiUzRQ%3D%3D--%3E" 
+function OutWord()
+{
+var NewWords;
+NewWords = unescape(Words);
+document.write(NewWords);
+} 
+OutWord();
+// -->
+</SCRIPT>
+</HEAD>
+<BODY>
+</BODY>
+</HTML>
+```
+
+发现一大段被注释掉的 JavaScript 代码
 
 ```javascript
 var Words ="..." 
@@ -206,14 +229,44 @@ document.write(NewWords);
 OutWord();
 ```
 
-把`document.write` 换成 `console.log`，可以再控制台得到下面的内容（也可以直接使用urlDecode进行解密）
+把`document.write` 换成 `console.log`，可以在控制台得到下面的内容（也可以直接使用 urlDecode 进行解密）
 
 ```
 <script>window.location.href='http://www.bugku.com';</script> 
 <!-- 一段base64编码 -->
 ```
 
-发现有一层base64，将其解密得到又是一层 url，使用urlDecode继续进行解密，终于发现一段php代码。
+![never give up](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/永不言弃.png)
+
+发现有一层 base64，将其解密得到下面的 php 代码。
+
+```php
+";if(!$_GET['id'])
+{
+	header('Location: hello.php?id=1');
+	exit();
+}
+$id=$_GET['id'];
+$a=$_GET['a'];
+$b=$_GET['b'];
+if(stripos($a,'.'))
+{
+	echo 'no no no no no no no';
+	return ;
+}
+$data = @file_get_contents($a,'r');
+if($data=="bugku is a nice plateform!" and $id==0 and strlen($b)>5 and eregi("111".substr($b,0,1),"1114") and substr($b,0,1)!=4)
+{
+	require("f4l2a3g.txt");
+}
+else
+{
+	print "never never never give up !!!";
+}
+
+
+?>
+```
 
 阅读源码，直接访问 http://123.206.87.240:8006/test/f4l2a3g.txt 即可得到flag
 
