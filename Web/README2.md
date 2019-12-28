@@ -2,13 +2,17 @@ web部分的20-36题。welcome to bugkuctf 和 过狗一句话 这两道题打�
 
 # 秋名山老司机
 
+每次打开刷新网页，要计算的内容都要变化
+
+![秋名山老司机](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/秋名山老司机.png)
+
 亲请在2s内计算老司机的车速是多少
 
 702165421+1154429138+1042541861*338334935-739834476-1652744732-1887097714-244715547*1461030294-401250319-977461116=?;
 
 Give me value post about 1531922609+1823637330*1021219038*24080258-1453837304+724139088+460522784-596962562-1691520371*1512685444-1749655109=?
 
-使用burpsuite抓包得到下面的内容，下面的 `Set-Cookie: PHPSESSID` 暗示要在一个会话中进行。
+使用 burpsuite 抓包得到下面的内容，下面的 `Set-Cookie: PHPSESSID` 暗示要在一个会话中进行。
 
 ```
 HTTP/1.1 200 OK
@@ -24,7 +28,7 @@ Set-Cookie: Timeout=alive; expires=Sat, 23-Nov-2019 07:40:32 GMT
 Content-Length: 347
 ```
 
-上面的提示给出是用POST请求，发送value值，两秒内肯定自己算不出来，写一个python脚本如下
+`Give me value post about` 提示给出是用 POST 请求，发送 value 值，两秒内肯定自己算不出来，写一个python脚本如下
 
 ```python
 import requests
@@ -69,7 +73,7 @@ Content-Length: 89
 </br>ææè§ä½ å¾å¿«ç¹!!!<!-- OK ,now you have to post the margin what you find -->
 ```
 
-将flag那个字段进行base64解码，得到的是**跑的还不错，给你flag吧: MzMwNTE3**，然而这是不对的，后来发现每次抓包flag那个字段都会改变（因为会话的不同），所以要写脚本。运行下面这段脚本，即可得到flag
+将 flag 那个字段进行base64解码，得到的是**跑的还不错，给你flag吧: MzMwNTE3**，然而这是不对的，后来发现每次抓包 flag 那个字段都会改变（因为会话的不同），所以要写脚本。运行下面这段脚本，即可得到flag
 
 ```python
 import requests
