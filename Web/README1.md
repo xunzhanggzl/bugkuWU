@@ -357,25 +357,25 @@ document.getElementById("levelQuest").onsubmit = checkSubmit;
 
 # flag在index里
 
-> 参考 https://blog.csdn.net/zpy1998zpy/article/details/80585443 
+> https://blog.csdn.net/zpy1998zpy/article/details/80585443 
 
 经典的本地文件包含漏洞+php伪协议的结合应用
 
-点击后发现网址变成了http://123.206.87.240:8005/post/index.php?file=show.php
+点击后发现网址变成了 http://123.206.87.240:8005/post/index.php?file=show.php
 
-这里我们看到了file关键字，于是我们就想到了php://filter，把网址改为 http://123.206.87.240:8005/post/index.php?file=php://filter/read=convert.base64-encode/resource=index.php，得到一段base64编码，解码得到flag
+这里我们看到了file关键字，于是我们就想到了php://filter，把网址改为 http://123.206.87.240:8005/post/index.php?file=php://filter/read=convert.base64-encode/resource=index.php，得到一段base64编码，解码即可得到 flag
 
 ![flag在index里](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/flag%E5%9C%A8index%E9%87%8C.png)
 
 # 输入密码查看flag
 
-提示输入五位的数字，直接使用burpsuite进行暴力破解
+提示输入五位的数字，直接使用 burpsuite 进行暴力破解，长度（length）与其它不一样的即为密码
 
 ![输入密码查看flag](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E8%BE%93%E5%85%A5%E5%AF%86%E7%A0%81%E6%9F%A5%E7%9C%8Bflag.png)
 
 # 点击一百万次
 
-阅读其中的JavaScript部分代码，使用hackbar或者控制台，可以将clicks设置为大于100万的数字，即可得出flag
+阅读其中的 JavaScript 部分代码，使用 hackbar 或者控制台，可以将 clicks 这个全局变量设置为大于100万的数字，即可得出 flag
 
 ![点击一百万次](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%82%B9%E5%87%BB%E4%B8%80%E7%99%BE%E4%B8%87%E6%AC%A1.png)
 
@@ -383,7 +383,7 @@ document.getElementById("levelQuest").onsubmit = checkSubmit;
 
 # 备份是个好习惯
 
-> 参考 https://blog.csdn.net/wyj____/article/details/90694603 
+> https://blog.csdn.net/wyj____/article/details/90694603 
 >
 > https://blog.csdn.net/EustiaSora/article/details/79149411
 
@@ -457,4 +457,4 @@ id=-1' union select 1,2,3,group_concat(column_name) from information_schema.colu
 id=-1' union select 1,2,3,skctf_flag from fl4g#
 ```
 
-得到flag：BUGKU{Sql_INJECT0N_4813drd8hz4}
+得到 flag：BUGKU{Sql_INJECT0N_4813drd8hz4}
