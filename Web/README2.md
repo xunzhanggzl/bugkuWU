@@ -332,7 +332,11 @@ admin                  （注册的admin后面有18个空格）
 
 打开题目网站提示我们：are you from google?
 
-也可以用下面的python脚本
+那么我们修改http referer头即可，使用 burpsuite 抓包，请求头添加上 `Referer:https://www.google.com`
+
+![你从哪里来](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E4%BD%A0%E4%BB%8E%E5%93%AA%E9%87%8C%E6%9D%A5.png)
+
+也可以用下面的 python 脚本
 
 ```python
 import requests
@@ -343,13 +347,9 @@ r = requests.get(url, headers=headers)
 print(r.text)
 ```
 
-那么我们修改http referer头即可，使用 burpsuite 抓包，请求头添加上 `Referer:https://www.google.com`
-
-![你从哪里来](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E4%BD%A0%E4%BB%8E%E5%93%AA%E9%87%8C%E6%9D%A5.png)
-
 # md5 collision(NUPT_CTF)
 
-> 参考：https://blog.csdn.net/dyw_666666/article/details/82348564
+> https://blog.csdn.net/dyw_666666/article/details/82348564
 
 题目网址是 `http://123.206.87.240:9009/md5.php`，提示我们 please input a
 
@@ -365,7 +365,11 @@ PHP在处理哈希字符串时，会利用”!=”或”==”来对哈希值进�
 
 打开题目地址 `http://123.206.87.240:8002/localhost/`，提示我们：请从本地访问！
 
-与管理员系统那个题非常类似，使用burpsuite抓包，在请求头里加上**X-Forwarded-For: 127.0.0.1** 就好了。
+与管理员系统那个题非常类似，使用 burpsuite 抓包，在请求头里加上**X-Forwarded-For: 127.0.0.1** 就好了。
+
+![程序员本地网站](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%A8%8B%E5%BA%8F%E5%91%98%E6%9C%AC%E5%9C%B0%E7%BD%91%E7%AB%99.png)
+
+也可以用 python 脚本
 
 ```python
 import requests
@@ -376,21 +380,21 @@ r = requests.get(url, headers=headers)
 print(r.text)
 ```
 
-![程序员本地网站](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E7%A8%8B%E5%BA%8F%E5%91%98%E6%9C%AC%E5%9C%B0%E7%BD%91%E7%AB%99.png)
-
 # 各种绕过
 
 阅读给出的代码，发现只要使uname的sha1和值与passwd的sha1的值相等即可，但是同时他们两个的值又不能相等，只要构造数组就可以了，借助了hackbar
 
-get方法构造出 `http://123.206.87.240:8002/web7/?id=margin&uname[]=1`，post方法的参数为 passwd[]=2
+get方法构造出 `http://123.206.87.240:8002/web7/?id=margin&uname[]=1`，post 方法的参数为 passwd[]=2
 
 ![各种绕过](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E5%90%84%E7%A7%8D%E7%BB%95%E8%BF%87.png)
 
 # web8
 
-题目提示我们：txt？？？？进入 `http://123.206.87.240:8002/web8/flag.txt`，显示 flags
+题目提示我们：txt？？？？
 
-进入题目网站 `http://123.206.87.240:8002/web8/`，有一段php代码
+进入 `http://123.206.87.240:8002/web8/flag.txt`，网页显示 flags
+
+进入题目网站 `http://123.206.87.240:8002/web8/`，有一段 php 代码如下：
 
 ```php
 <?php

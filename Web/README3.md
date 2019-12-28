@@ -4,7 +4,7 @@ web部分的37-50题
 
 ![这是一个神奇的登陆框](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E7%A5%9E%E5%A5%87%E7%9A%84%E7%99%BB%E5%BD%95%E6%A1%86.png)
 
-首先进行抓包，如上图所示，输入admin和123456，保存为1.txt，放在 E:\杂\c加加 目录下，然后用`sqlmap`进行注入。
+首先进行抓包，如上图所示，输入 admin 和 123456，保存为 1.txt，放在 E:\杂\c加加 目录下，然后用 `sqlmap` 进行注入。
 
 ```bash
 # 使用下面的命令爆破出了数据库名称为 bugkusql1
@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
 # flag.php
 
-提示：hint，于是在URL后面加一个hint参数 http://123.206.87.240:8002/flagphp/?hint=1，得到了下面的php代码。变成一道代码审计题了，要我们在COOKIE字段中添加ISecer参数,值是$KEY序列化后的值。
+提示：hint，于是在URL后面加一个hint参数 http://123.206.87.240:8002/flagphp/?hint=1，得到了下面的php代码。变成一道代码审计题了，要我们在 COOKIE 字段中添加 ISecer 参数,值是 $KEY 序列化后的值。
 
 **其中有三个地方需要注意：**
 
@@ -175,7 +175,7 @@ $KEY='ISecer:www.isecer.com';
 ?>
 ```
 
-写个script，把$KEY序列化后的值打印出来
+写个 script，把 $KEY 序列化后的值打印出来
 
 ```php
 <?php
@@ -197,6 +197,10 @@ $KEY='ISecer:www.isecer.com';
 
 # Trim的日记本
 
-使用御剑扫描出来下面的结果，然后打开发现flag，竟然真的是flag
+使用御剑扫描出来下面的结果
 
 ![Trim的日记本](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/Trim%E7%9A%84%E6%97%A5%E8%AE%B0%E6%9C%AC.png)
+
+然后打开发现 show.php，竟然真的是 flag
+
+![Trim的日记本](https://raw.githubusercontent.com/xunzhanggzl/bugkuWU/master/image/web_img/trim.png)
